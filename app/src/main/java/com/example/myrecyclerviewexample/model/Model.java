@@ -6,10 +6,12 @@ import java.util.List;
 public class Model {
 
     private static Model model;
-    private List<Usuario> list;
+    private List<Usuario> usuarios;
+    private List<Oficio> oficios;
 
     private Model(){
-        list = new ArrayList<>();
+        usuarios = new ArrayList<>();
+        oficios = new ArrayList<>();
     }
 
 
@@ -22,10 +24,12 @@ public class Model {
 
     public List<Usuario> getUsuarios() {
         MysqlDB mysqlDB = new MysqlDB();
-        list = mysqlDB.getAllUsers();
-        return list;
+        usuarios = mysqlDB.getAllUsers();
+        return usuarios;
     }
     public List<Oficio> getOficios(){
-
+        MysqlDB mysqlDB = new MysqlDB();
+        oficios = mysqlDB.getAllOcupations();;
+        return oficios;
     }
 }

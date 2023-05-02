@@ -10,18 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myrecyclerviewexample.model.Model;
+import com.example.myrecyclerviewexample.model.Oficio;
 import com.example.myrecyclerviewexample.model.Usuario;
 
 import java.util.List;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Usuario> list;
+    private List<Usuario> list;
     private final LayoutInflater inflater;
     private View.OnClickListener onClickListener;
 
-    public MyRecyclerViewAdapter(Context context, List<Usuario> list){
-        this.list = list;
+    public MyRecyclerViewAdapter(Context context){
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -37,9 +38,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        List<Oficio> oficios = Model.getInstance().getOficios();
+
         Usuario u = list.get(position);
         holder.title.setText(u.getApellidos().concat(", ").concat(u.getNombre()));
-        holder.subtitle.setText(u.getOficio());
+        holder.subtitle.setText(oficios.stream().filter(o->o.getIdOficio()==u.getOficio())
+                .findFirst()
+                .get()
+                .getDescripcion());
         switch (u.getOficio()){
             case 1 : holder.image.setImageResource(R.mipmap.ic_1_foreground);
             break;
@@ -75,6 +81,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
+    }
+
+    public void setUsuarios(List<Usuario> usuariosList){
+        this.list = usuariosList;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
